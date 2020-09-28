@@ -20,15 +20,24 @@ Papers
 To install
 ----------
 
-``git https://github.com/flesage/virtualMRI.git``
-
-``cd VirtualMRI``
-
 ``conda create -n ENV_NAME python=3.7 spyder matplotlib scipy networkx=2.2 mayavi``
 
 ``source activate ENV_NAME``
 
+``git clone https://github.com/Damseh/VascularGraph.git``
+
+``cd VascularGraph``
+
 ``python setup.py install``
+
+``cd ..``
+
+``git https://github.com/flesage/virtualMRI.git``
+
+``cd VirtualMRI``
+
+``python setup.py install``
+
 
 To test
 -------
@@ -36,8 +45,6 @@ To test
 ``python -i test_oct.py``
 
 * Free software: MIT license
-* Documentation: https://VascGraph.readthedocs.io.
-
 
 Credits
 -------
