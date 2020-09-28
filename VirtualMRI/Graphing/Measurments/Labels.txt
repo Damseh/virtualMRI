@@ -1,0 +1,21 @@
+Capillary:
+
+Column 1 : diameter (um)
+Column 2: velocity (mm/s)
+Column 3: flux (cells/s)
+Column 4: Hct
+_______________________________________________________
+
+Artery and Vein PO2
+
+Column 1: diameter (um)
+Column 2: PO2 (mmHg)
+Each row shows average diameter and PO2 for one vessel through depth of 0-150 um
+__________________________________________________________-
+
+OCT
+
+Column 1: diameter (um)
+Column 2: Flow (ml/min)
+
+All data through 50-650 um of depth
