@@ -1,0 +1,29 @@
+
+[Mapping]
+radius_scaling=0.45
+hct_values=0.44, 0.44, 0.33
+
+[MRI]
+
+B0=3
+#there is always degradation due to T2*
+with_T1= yes
+with_T2= yes
+with_diffusion= no
+with_spin_labeling= yes
+#water diffusion coefficient
+d=0.8 
+
+TE=5.0 
+T1=1590.0
+delta_small=1.0 
+delta_big=4.0 
+#time step
+dt=0.5 
+echo_spacing=1.0 
+
+[Gradients]
+b_values=0, 20
+phi =  45,  90, 135
+#phi =  90
+theta = 45, 90, 135
