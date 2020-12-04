@@ -1,0 +1,3 @@
+[console_scripts]
+VirtualMRI = VirtualMRI.cli:main
+
