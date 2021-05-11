@@ -154,7 +154,7 @@ if __name__=='__main__':
     #mri
     print('--Simulate MRI ...')
     '''
-    this simulate the diffusion mri response(s) based on different values of 
+    this simulates the diffusion mri response(s) based on different values of 
     b, phi and theta. Check the 'config.txt' file
     '''
     exp = get_signal(g, B0=B0, b=b)

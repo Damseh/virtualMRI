@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr 25 18:43:03 2020
+Created on Thu Dec  3 14:35:46 2020
 
 @author: rdamseh
 """
-
 
 import numpy as np
 from VascGraph.GeomGraph.DiGraph import DiGraph
@@ -46,8 +45,65 @@ class OxyGraph:
             g=self.BuildDirectionsGraph(g)         
         
         return g         
+    
+    def AddType(self, threshold=10, art_vein=False):
+        '''
+        add type to graph nodes
+        
+        1: art, 2: vein, 3: capp 
+        '''
+        
+        def setT(g, nodes, t):
+            for i in nodes:
+                g.node[i]['type']=t
 
+        if not art_vein:
+            r=np.array(self.g.GetRadii())
+            types=np.ones_like(r).astype(int)
+            types[types<threshold]=3
+            self.g.SetTypes(types)
+            
+        else:
+            print('--Assign types to branches, this might take a while ...')
+            branches=self.g.GetPathesDict()
+            if type(branches)==zip:
+                branches=list(branches)  
+            art_vein=np.random.choice([1,2], size=len(branches))
+            for b, ty in zip(branches, art_vein):
+                nodes=b[1]
+                rad=[self.g.node[i]['r'] for i in nodes]
+                meanrad=np.mean(rad)
+                if meanrad<threshold:
+                    setT(self.g, nodes, 3)
+                else:
+                    setT(self.g, nodes, ty)
 
+    def AddVelocityFromFlow(self, scale_flow=1e-7, scale_diam=1e-3):
+        '''
+        Ouput flow should be in mm3/s
+        '''
+        flows=np.array(self.g.GetFlows())*scale_flow # mm3/s
+        radii=np.array(self.g.GetRadii())*scale_diam # mm
+        velocities=flows/(np.pi*(radii)**2) # mm/s
+        
+        # fix
+        velocities[velocities>3.0]=3.0
+        velocities[velocities<0.5]=0.5        
+        velocities=velocities*1000 # um/s      
+        
+        for i, v in zip(self.g.GetNodes(), velocities):
+            self.g.node[i]['velocity']=v
+
+        for i, f in zip(self.g.GetNodes(), flows):
+            self.g.node[i]['flow']=f
+            
+    def AddSo2FromPo2(self):
+        po2=np.array([self.g.node[i]['po2'] for i in self.g.GetNodes()])
+        so2=self.so2FROMpo2(po2)
+        for i, s in zip(self.g.GetNodes(), so2):
+            self.g.node[i]['so2']=s
+
+            
     def BuildRegModel(self, datafile=None):
         
         '''
@@ -142,7 +198,6 @@ class OxyGraph:
             g.node[i]['po2']=po2
         
         # infer flow values and convert to velocities
-        
         flows=reg_model_flow.predict(x_) # pL/s
         flows=flows*1e-7 # mm3/s
         diameter=diameter*1e-3 # mm
@@ -152,9 +207,6 @@ class OxyGraph:
         velocities[velocities>3.0]=3.0
         velocities[velocities<0.5]=0.5        
         velocities=velocities*1000 # um/s      
-        
-
-
         
         for i, v in zip(g.GetNodes(), velocities):
             g.node[i]['velocity']=v
@@ -172,11 +224,19 @@ class OxyGraph:
             
         return g
 
-    def BuildDirectionsGraph(self, g):
+    def BuildDirectionsGraph(self, g=None):
         
         '''
         Construct vlelocity unit vectors at each node in the graph .
         '''
+        ret=1
+        if g is None:
+            g=self.g
+            ret=0
+        
+        if not g.is_directed():
+            print('-- Input grpah should be directed!')
+        
         nodes=[i for i in g.GetNodes() if len(g.GetSuccessors(i))>0]
         p = np.array([g.node[i]['pos'] for i in nodes])
         x, y, z = p[:, 0], p[:, 1], p[:, 2] 
@@ -219,7 +279,8 @@ class OxyGraph:
             g.node[i]['dy']=0
             g.node[i]['dz']=0
             
-        return g
+        if ret:
+            return g
     
     
     def so2FROMpo2(self, po2, model='mouse'):
