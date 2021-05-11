@@ -32,7 +32,7 @@ To install
 
 ``cd ..``
 
-``git https://github.com/flesage/virtualMRI.git``
+``git clone https://github.com/flesage/virtualMRI.git``
 
 ``cd VirtualMRI``
 
