@@ -20,24 +20,27 @@ Papers
 To install
 ----------
 
-``conda create -n ENV_NAME python=3.7 spyder matplotlib scipy networkx=2.2 mayavi``
+``conda create -n ENV_NAME python=3.7.5`` 
 
-``source activate ENV_NAME``
+``conda activate ENV_NAME``
+
+``conda install -c conda-forge mayavi=4.6.2``
+
+``conda install -c conda-forge spyder=4.0.1 matplotlib=3.1.1 scipy=1.3.1 networkx=2.2 scikit-learn pandas tqdm``
+
+``pip install xlrd==1.2.0``
 
 ``git clone https://github.com/Damseh/VascularGraph.git``
+
+``git clone https://github.com/flesage/virtualMRI.git``
 
 ``cd VascularGraph``
 
 ``python setup.py install``
 
-``cd ..``
-
-``git clone https://github.com/flesage/virtualMRI.git``
-
-``cd virtualMRI``
+``cd ../virtualMRI``
 
 ``python setup.py install``
-
 
 To test
 -------
