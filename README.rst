@@ -34,7 +34,7 @@ To install
 
 ``git clone https://github.com/flesage/virtualMRI.git``
 
-``cd VirtualMRI``
+``cd virtualMRI``
 
 ``python setup.py install``
 
